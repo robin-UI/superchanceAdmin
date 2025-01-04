@@ -17,3 +17,13 @@ export const create_user = async function (body) {
     return error;
   }
 };
+
+export const list_user = async function () {
+  try {
+    const { data } = await axios("api/v1/user/list/");
+    return data;
+  } catch (error) {
+    console.log("error on  API", error);
+    return error;
+  }
+};
