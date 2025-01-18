@@ -1,7 +1,8 @@
 import axios from "axios";
 import { getCookie } from "../utils/functions";
+import TokenManager from "../utils/Tokenmanage";
 
-let cookies = getCookie("accessToken");
+let cookies = TokenManager.getAccessToken();
 axios.defaults.baseURL = "https://anirudh13180.pythonanywhere.com/";
 axios.defaults.headers.post["Content-Type"] = "application/json";
 if (cookies) {

@@ -11,6 +11,8 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useNavigate } from "react-router";
+import { login_user } from "../../api/user";
+import TokenManager from "../../utils/Tokenmanage";
 
 const EMAIL = "superchance@superchance.com";
 const PASSWORD = "1234567890";
@@ -60,16 +62,27 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (validateForm()) {
+    // if (validateForm()) {
       // Here you would typically handle the login logic
-      console.log("Form submitted:", formData);
-      if (formData.email === EMAIL && formData.password === PASSWORD) {
-        localStorage.setItem("isLogin", true)
+      // console.log("Form submitted:", formData);
+      // if (formData.email === EMAIL && formData.password === PASSWORD) {
+      //   localStorage.setItem("isLogin", true)
+      //   navigate("/home")
+      // }
+
+      let res = await login_user({
+        username: formData.email,
+        password: formData.password,
+      })
+      if (res.statusCode === 200) {
+        // setIsLoading(false);
+        TokenManager.setAuthTokens(res.response);
+        // document.cookie = `accessToken=${res.response.accessToken}`
         navigate("/home")
       }
-    }
+    // }
   };
   return (
     <Container component="main" maxWidth="xs">

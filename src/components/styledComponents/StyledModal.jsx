@@ -2,6 +2,7 @@ import {
   Box,
   Button,
   IconButton,
+  InputAdornment,
   Modal,
   Paper,
   TextField,
@@ -9,6 +10,8 @@ import {
 } from "@mui/material";
 // import React from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import { useState } from "react";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 const style = {
   position: "absolute",
   top: "50%",
@@ -28,6 +31,71 @@ function StyledModal({
   formData,
   handleChange,
 }) {
+  // const [formData, setFormData] = useState({
+  //   name: "",
+  //   userName: "",
+  //   password: "",
+  //   confirm_password: "",
+  // });
+
+  const [errors, setErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleChangeName = (e) => {
+    handleChange(e);
+    const { name } = e.target;
+    if (errors[name]) {
+      setErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Name validation
+    if (!formData.first_name) {
+      newErrors.first_name = "Name is required";
+    }
+
+    // Name validation
+    if (!formData.username) {
+      newErrors.username = "UserName is required";
+    }
+
+    // Password validation
+    if (!formData.password) {
+      newErrors.password = "Password is required";
+    } else if (formData.password.length < 6) {
+      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password !== formData.confirm_password) {
+      newErrors.password = "Password must be same";
+    }
+
+    if (!formData.confirm_password) {
+      newErrors.confirm_password = "Confirm Password is required";
+    } 
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmitform = async (e) => {
+    e.preventDefault();
+    console.log();
+
+    if (validateForm()) {
+      handleSubmit(e);
+    }
+  };
+
+  const closeModal = function() {
+    handleClose();
+    setErrors({})
+  }
+
   return (
     <Modal
       open={open}
@@ -54,11 +122,16 @@ function StyledModal({
           >
             Create Device
           </Typography>
-          <IconButton onClick={handleClose}>
+          <IconButton onClick={closeModal}>
             <CloseIcon />
           </IconButton>
         </Box>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box
+          component="form"
+          onSubmit={handleSubmitform}
+          noValidate
+          sx={{ mt: 1 }}
+        >
           <Box sx={{ px: 1 }}>
             <TextField
               margin="normal"
@@ -70,9 +143,9 @@ function StyledModal({
               autoComplete="name"
               autoFocus
               value={formData.first_name}
-              onChange={handleChange}
-              // error={!!errors.email}
-              // helperText={errors.email}
+              onChange={handleChangeName}
+              error={!!errors.first_name}
+              helperText={errors.first_name}
             />
             <TextField
               margin="normal"
@@ -84,9 +157,9 @@ function StyledModal({
               autoComplete="userName"
               autoFocus
               value={formData.username}
-              onChange={handleChange}
-              // error={!!errors.email}
-              // helperText={errors.email}
+              onChange={handleChangeName}
+              error={!!errors.username}
+              helperText={errors.username}
             />
             <TextField
               margin="normal"
@@ -96,26 +169,53 @@ function StyledModal({
               label="Password"
               name="password"
               autoComplete="password"
-            //   type={showPassword ? "text" : "password"}
+              type={showPassword ? "text" : "password"}
               autoFocus
               value={formData.password}
-              onChange={handleChange}
-              // error={!!errors.email}
-              // helperText={errors.email}
+              onChange={handleChangeName}
+              error={!!errors.password}
+              helperText={errors.password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
             <TextField
               margin="normal"
               required
               fullWidth
-              id="conformpassword"
+              id="confirm_password"
               label="Conform password"
               name="confirm_password"
               autoComplete="conformpassword"
+              type={showPassword ? "text" : "password"}
               autoFocus
               value={formData.confirm_password}
-              onChange={handleChange}
-              // error={!!errors.email}
-              // helperText={errors.email}
+              onChange={handleChangeName}
+              error={!!errors.confirm_password}
+              helperText={errors.confirm_password}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={() => setShowPassword(!showPassword)}
+                      edge="end"
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
             />
           </Box>
           <Box sx={{ borderTop: 1, borderColor: "divider", p: 1, py: 2 }}>
