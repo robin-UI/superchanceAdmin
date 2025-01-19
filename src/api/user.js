@@ -28,6 +28,25 @@ export const list_user = async function () {
   }
 };
 
+
+export const login_user = async function (body) {
+  try {
+    // const { data } = await axios.post("api/v1/user/login/", {
+    //   ...body,
+    // });
+    const { data } = await axios({
+      method: "post",
+      url: "api/v1/user/login/",
+      data: body,
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    return data;
+  } catch (error) {
+    console.log("error on  API", error);
+    return error;
+  }
+};
+
 export const user_details = async function (id) {
   try {
     const { data } = await axios("api/v1/user/"+id+"/", );
@@ -38,14 +57,21 @@ export const user_details = async function (id) {
   }
 };
 
-export const login_user = async function (body) {
+export const user_delete = async function (id) {
   try {
-    // const { data } = await axios.post("api/v1/user/login/", {
-    //   ...body,
-    // });
+    const { data } = await axios.delete("api/v1/user/edit/"+id+"/", );
+    return data;
+  } catch (error) {
+    console.log("error on  API", error);
+    return error;
+  }
+};
+
+export const user_balance_margin = async function (body) {
+  try {
     const { data } = await axios({
-      method: "post",
-      url: "api/v1/user/login/",
+      method: "patch",
+      url: "api/v1/user/balance/",
       data: body,
       headers: { "Content-Type": "multipart/form-data" },
     });

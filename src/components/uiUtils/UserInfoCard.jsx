@@ -64,7 +64,7 @@ function UserInfoCard({
               </Typography>
             </Box>
             <Typography sx={{ ml: "auto", fontWeight: 600, color: "#2e7d32" }}>
-              {balance}
+            $ {balance}
             </Typography>
           </Box>
         </CardContent>

@@ -108,7 +108,7 @@ function UserList() {
           ) : (
             userList.map((obj, key) => (
               <Grid key={key} size={6}>
-                <UserInfoCard deviceId={obj.id} username={obj.username} />
+                <UserInfoCard deviceId={obj.id} username={obj.username} balance={obj.balance}/>
               </Grid>
             ))
           )}
