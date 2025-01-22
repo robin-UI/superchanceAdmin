@@ -78,7 +78,7 @@ function Login() {
       })
       if (res.statusCode === 200) {
         // setIsLoading(false);
-        TokenManager.setAuthTokens(res.response);
+        TokenManager.setAuthTokens(res.response.auth);
         // document.cookie = `accessToken=${res.response.accessToken}`
         navigate("/home")
       }
